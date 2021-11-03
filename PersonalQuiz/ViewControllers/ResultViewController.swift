@@ -45,10 +45,10 @@ class ResultViewController: UIViewController {
         if dog > cat && dog > rabbit && dog > turtle {
             emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.dog.rawValue)"
             descriptionLabel.text = PersonalQuiz.AnimalType.dog.definition
-        } else if dog < cat && cat > rabbit && cat > turtle {
+        } else if cat > dog && cat > rabbit && cat > turtle {
             emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.cat.rawValue)"
             descriptionLabel.text = PersonalQuiz.AnimalType.cat.definition
-        } else if rabbit > cat && dog < rabbit && rabbit > turtle {
+        } else if rabbit > dog && rabbit > cat && rabbit > turtle {
             emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.rabbit.rawValue)"
             descriptionLabel.text = PersonalQuiz.AnimalType.rabbit.definition
         } else {
