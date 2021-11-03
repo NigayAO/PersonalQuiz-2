@@ -11,7 +11,7 @@ class QuestionsViewController: UIViewController {
     
     private let questions = Question.getQuestions()
     private var questionIndex = 0
-    private var currentAnswers: [Answer] {
+    var currentAnswers: [Answer] {
         questions[questionIndex].answers
     }
     private var answerChosen:[Answer] = []
@@ -36,20 +36,14 @@ class QuestionsViewController: UIViewController {
         }
     }
     
-    private var emoji: Character?
-    private var text: String?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
         guard let resultVC = segue.destination as? ResultViewController else { return }
-        
-                resultVC.emoji = emoji ?? " "
-                resultVC.descriptionResult = text ?? ""
+        resultVC.arrayOfAnswer = answerChosen
     }
     
     @IBAction func singleAnswerButtonPressed(_ sender: UIButton) {
@@ -147,42 +141,6 @@ extension QuestionsViewController {
             updateUI()
             return
         }
-        choseAnimal()
         performSegue(withIdentifier: "showResult", sender: nil)
-    }
-    private func choseAnimal() {
-        
-        var rabbit = 0
-        var cat = 0
-        var dog = 0
-        var turtle = 0
-        
-        for answer in answerChosen {
-            
-            switch answer.type {
-            case PersonalQuiz.AnimalType.dog:
-                dog += 1
-            case PersonalQuiz.AnimalType.cat:
-                cat += 1
-            case PersonalQuiz.AnimalType.turtle:
-                turtle += 1
-            case PersonalQuiz.AnimalType.rabbit:
-                rabbit += 1
-            }
-        }
-        
-        if dog > cat && dog > rabbit && dog > turtle {
-            emoji = PersonalQuiz.AnimalType.dog.rawValue
-            text = PersonalQuiz.AnimalType.dog.definition
-        } else if dog < cat && cat > rabbit && cat > turtle {
-            emoji = PersonalQuiz.AnimalType.cat.rawValue
-            text = PersonalQuiz.AnimalType.cat.definition
-        } else if rabbit > cat && dog < rabbit && rabbit > turtle {
-            emoji = PersonalQuiz.AnimalType.rabbit.rawValue
-            text = PersonalQuiz.AnimalType.rabbit.definition
-        } else {
-            emoji = PersonalQuiz.AnimalType.turtle.rawValue
-            text = PersonalQuiz.AnimalType.turtle.definition
-        }
     }
 }
