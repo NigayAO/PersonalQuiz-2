@@ -19,41 +19,25 @@ class ResultViewController: UIViewController {
         navigationItem.setHidesBackButton(true, animated: false)
         whatsTheAnimal()
     }
-    
-    //Логика унылая, но ничего лучше придумать пока что не смог
+
     func whatsTheAnimal() {
+        var storageResult: [PersonalQuiz.AnimalType: Int] = [:]
+        let animals = arrayOfAnswer.map { $0.type }
         
-        var rabbit = 0
-        var cat = 0
-        var dog = 0
-        var turtle = 0
-        
-        for answer in arrayOfAnswer {
-            
-            switch answer.type {
-            case PersonalQuiz.AnimalType.dog:
-                dog += 1
-            case PersonalQuiz.AnimalType.cat:
-                cat += 1
-            case PersonalQuiz.AnimalType.turtle:
-                turtle += 1
-            case PersonalQuiz.AnimalType.rabbit:
-                rabbit += 1
+        for animal in animals {
+            if let animalCount = storageResult[animal] {
+                storageResult.updateValue(animalCount + 1, forKey: animal)
+            } else {
+                storageResult[animal] = 1
             }
         }
-        
-        if dog > cat && dog > rabbit && dog > turtle {
-            emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.dog.rawValue)"
-            descriptionLabel.text = PersonalQuiz.AnimalType.dog.definition
-        } else if cat > dog && cat > rabbit && cat > turtle {
-            emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.cat.rawValue)"
-            descriptionLabel.text = PersonalQuiz.AnimalType.cat.definition
-        } else if rabbit > dog && rabbit > cat && rabbit > turtle {
-            emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.rabbit.rawValue)"
-            descriptionLabel.text = PersonalQuiz.AnimalType.rabbit.definition
-        } else {
-            emojiLabel.text = "Вы - \(PersonalQuiz.AnimalType.turtle.rawValue)"
-            descriptionLabel.text = PersonalQuiz.AnimalType.turtle.definition
-        }
+        let sortedAnswers = storageResult.sorted { $0.value < $1.value }
+        guard let totalAnimal = sortedAnswers.last?.key else { return }
+        updateUI(animal: totalAnimal)
+    }
+    
+    private func updateUI(animal: PersonalQuiz.AnimalType) {
+        emojiLabel.text = "Вы - \(animal.rawValue)"
+        descriptionLabel.text = animal.definition
     }
 }
